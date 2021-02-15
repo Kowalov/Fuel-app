@@ -14,9 +14,3 @@ class Calculator:
         self.fuel = self.laps * self.fuelxlap
         return self.fuel
 
-
-
-x = Calculator('5:00:00', 4.5)
-print(Calculator.time_based(x,'5:00:00'))
-
-print(Calculator.laps_based(x, 1))
