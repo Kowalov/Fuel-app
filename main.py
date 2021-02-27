@@ -4,63 +4,100 @@ from tkinter import *
 
 class Calculator():
     def __init__(self, laptime, fuelxlap):
-        self.laptime = sum(x * int(t) for x, t in zip([3600, 60, 1], laptime.split(":")))               #lap time in seconds
-        self.fuelxlap = int(fuelxlap)                                                                   #fuel for one lap i liters
+        self.laptime = sum(x * int(t) for x, t in zip([3600, 60, 1], laptime.split(":")))                 #lap time in seconds
+        self.fuelxlap = int(float(fuelxlap))                                                              #fuel for one lap i liters
 
 
     def time_based(self, time):
-        self.time = sum(x * int(t) for x, t in zip([3600, 60, 1], time.split(":")))                     #race time in seconds
+        self.time = sum(x * int(t) for x, t in zip([3600, 60, 1], time.split(":")))                       #race time in seconds
         self.lapsamount = self.time / self.laptime
         self.fuel = self.lapsamount * self.fuelxlap
-        self.myLabel = Label(root, text=str(self.fuel))
+        self.myLabel = Label(text=str(self.fuel))
         self.myLabel.pack()
 
     def laps_based(self, laps):
-        self.laps = int(laps)                                                                            #Number of laps
+        self.laps = int(laps)                                                                               #Number of laps
         self.fuel = self.laps * self.fuelxlap
-        self.myLabel = Label(root, text=str(self.fuel))
+        self.myLabel = Label(text=str(self.fuel))
         self.myLabel.pack()
 
 
+class SampleApp(Tk):
+    def __init__(self):
+        Tk.__init__(self)
+        self._frame = None
+        self.switch_frame(StartPage)
 
-class Buttons (Calculator):
+    def switch_frame(self, frame_class):
+        new_frame = frame_class(self)
+        if self._frame is not None:
+            self._frame.destroy()
+        self._frame = new_frame
+        self._frame.pack()
+
+
+class StartPage(Frame):
     def __init__(self, master):
-        frame = Frame(master)
-        frame.pack()
+        Frame.__init__(self, master)
+        Label(self, text="This is the start page").pack(side="top", fill="x", pady=10)
+        Button(self, text="Open page one",
+                  command=lambda: master.switch_frame(PageOne)).pack()
+        Button(self, text="Open page two",
+                  command=lambda: master.switch_frame(PageTwo)).pack()
 
 
-        self.L1 = Label(frame, text="Fuel calculator: please enter data")
-        self.L1.pack()
+
+class PageOne (Frame):
+    def __init__(self, master):
+        Frame.__init__(self, master)
+
+        L1 = Label(self, text="Fuel calculator: please enter data")
+        L1.pack()
+
+        input1 = Entry(self, width=30)
+        input1.pack()
+        input1.insert(0, "Enter your lap time")
+
+        input2 = Entry(self, width=30)
+        input2.pack()
+        input2.insert(0, "Enter the fuel per lap")
+
+        input3 = Entry(self, width=30)
+        input3.pack()
+        input3.insert(0, "Enter the race time")
 
 
-        self.input1 = Entry(frame, width=30)
-        self.input1.pack()
-        self.input1.insert(0, "Enter your lap time")
+        printButton = Button(self, text="time based", command=lambda: Calculator.time_based(Calculator(input1.get(),input2.get()),input3.get()))
 
-        self.input2 = Entry(frame, width=30)
-        self.input2.pack()
-        self.input2.insert(0, "Enter the fuel per lap")
+        printButton.pack(side=LEFT)
 
-        self.input3 = Entry(frame, width=30)
-        self.input3.pack()
-        self.input3.insert(0, "Enter the race time")
+        Button(self, text="Return to start page",
+            command=lambda: master.switch_frame(StartPage)).pack()
 
-        self.input4 = Entry(frame, width=30)
-        self.input4.pack()
-        self.input4.insert(0, "Enter the amount of laps")
 
-        self.printButton = Button(frame, text="time based", command=lambda: Calculator.time_based(Calculator(self.input1.get(),self.input2.get()),self.input3.get()))
+class PageTwo(Frame):
+    def __init__(self, master):
+        Frame.__init__(self, master)
 
-        self.printButton.pack(side=LEFT)
+        input1 = Entry(self, width=30)
+        input1.pack()
+        input1.insert(0, "Enter the fuel per lap")
 
-        self.printButton2 = Button(frame, text="laps based", command=lambda: Calculator.laps_based(Calculator(self.input1.get(),self.input2.get()),self.input4.get()))
+        input2 = Entry(self, width=30)
+        input2.pack()
+        input2.insert(0, "Enter the race time")
 
-        self.printButton2.pack(side=RIGHT)
+        input3 = Entry(self, width=30)
+        input3.pack()
+        input3.insert(0, "Enter the amount of laps")
 
-    def click(self):
-        print(self.input2.get())
+        printButton1 = Button(self, text="laps based", command=lambda: Calculator.laps_based(Calculator(input1.get(),input2.get()),input3.get()))
 
-root = Tk()
-b = Buttons(root)
-root.mainloop()
+        printButton1.pack(side=LEFT)
 
+        Button(self, text="Return to start page",
+            command=lambda: master.switch_frame(StartPage)).pack()
+
+if __name__ == "__main__":
+    app = SampleApp()
+    app.mainloop()
