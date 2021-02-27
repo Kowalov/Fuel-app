@@ -39,10 +39,10 @@ class SampleApp(Tk):
 class StartPage(Frame):
     def __init__(self, master):
         Frame.__init__(self, master)
-        Label(self, text="This is the start page").pack(side="top", fill="x", pady=10)
-        Button(self, text="Open page one",
+        Label(self, text="Is your race based on time duration or on number of laps?").pack(side="top", fill="x", pady=10)
+        Button(self, text="TIME",
                   command=lambda: master.switch_frame(PageOne)).pack()
-        Button(self, text="Open page two",
+        Button(self, text="LAPS",
                   command=lambda: master.switch_frame(PageTwo)).pack()
 
 
@@ -67,7 +67,7 @@ class PageOne (Frame):
         input3.insert(0, "Enter the race time")
 
 
-        printButton = Button(self, text="time based", command=lambda: Calculator.time_based(Calculator(input1.get(),input2.get()),input3.get()))
+        printButton = Button(self, text="Calculate", command=lambda: Calculator.time_based(Calculator(input1.get(),input2.get()),input3.get()))
 
         printButton.pack(side=LEFT)
 
@@ -78,6 +78,9 @@ class PageOne (Frame):
 class PageTwo(Frame):
     def __init__(self, master):
         Frame.__init__(self, master)
+
+        L1 = Label(self, text="Fuel calculator: please enter data")
+        L1.pack()
 
         input1 = Entry(self, width=30)
         input1.pack()
@@ -91,7 +94,7 @@ class PageTwo(Frame):
         input3.pack()
         input3.insert(0, "Enter the amount of laps")
 
-        printButton1 = Button(self, text="laps based", command=lambda: Calculator.laps_based(Calculator(input1.get(),input2.get()),input3.get()))
+        printButton1 = Button(self, text="Calculate", command=lambda: Calculator.laps_based(Calculator(input1.get(),input2.get()),input3.get()))
 
         printButton1.pack(side=LEFT)
 
